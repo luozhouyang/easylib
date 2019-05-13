@@ -91,7 +91,7 @@ class VocabGenerator:
                 continue
             with open(f, mode='rt', encoding='utf8', buffering=8192) as fin:
                 for line in fin:
-                    words = self.line_splitor.split(line)
+                    words = self.line_splitor.split(line.strip('\n'))
                     if not words:
                         continue
                     self.counter.update(words)
@@ -101,7 +101,7 @@ class VocabGenerator:
             for k, v in self.counter.most_common(self.vocab_size):
                 if v < self.min_count:
                     continue
-                if v == ['unk']:
+                if k == '<unk>':
                     continue
                 if self.filters and any(vf.filter(k) for vf in self.filters):
                     continue
