@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="easylib",
-    version="0.0.2",
+    version="0.0.3",
     description="Frequently used functions and modules library for Python 3 by ZhouYang Luo.",
     long_description=long_description,
     long_description_content_type="text/markdown",

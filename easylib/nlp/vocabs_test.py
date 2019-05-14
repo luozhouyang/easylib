@@ -4,6 +4,7 @@ from easylib.nlp.vocabs import VocabGenerator, VocabLengthFilter, VocabEmptyFilt
 from easylib.nlp.vocabs import VocabSpaceLineSplitor
 
 
+
 class VocabsTest(unittest.TestCase):
 
     def testVocabGenerator(self):
@@ -21,7 +22,6 @@ class VocabsTest(unittest.TestCase):
         output_file = '/tmp/vocab.test.txt'
 
         g.generate_from_iterable(lines, output_file)
-
 
 
 if __name__ == "__main__":

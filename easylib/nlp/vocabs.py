@@ -138,7 +138,7 @@ class VocabGenerator:
             for k, v in self.counter.most_common(self.vocab_size):
                 if v < self.min_count:
                     continue
-                if v == '<unk>':
+                if k == '<unk>':
                     continue
                 if self.filters and any(vf.filter(k) for vf in self.filters):
                     continue
