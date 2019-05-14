@@ -53,6 +53,31 @@ class VocabLengthFilter(VocabFilter):
         return len(vocab) > self.max_len
 
 
+class VocabEmptyFilter(VocabFilter):
+    """Filter empty string."""
+
+    def filter(self, vocab):
+        if not vocab:
+            return True
+        return False
+
+
+class VocabSpecialTokensFilter(VocabFilter):
+    """Filter special tokens."""
+
+    def __init__(self, tokens):
+        self.tokens = tokens
+        
+    def filter(self, vocab):
+        for t in self.tokens:
+            vocab = vocab.replace(t, '')
+            if not vocab:
+                return True
+        if not vocab:
+            return True
+        return False
+
+
 class VocabGenerator:
 
     def __init__(self, vocab_size, line_splitor, filters=None, min_count=5, use_unk=True, sortby='freq_desc'):
@@ -91,17 +116,29 @@ class VocabGenerator:
                 continue
             with open(f, mode='rt', encoding='utf8', buffering=8192) as fin:
                 for line in fin:
-                    words = self.line_splitor.split(line)
+                    words = self.line_splitor.split(line.strip('\n'))
                     if not words:
                         continue
                     self.counter.update(words)
+            print('Finished to count file: %s' % f)
 
-        with open(output_file, mode='wt', encoding='utf8', buffering=8192) as fout:
+        self._write_to_file(output_file)
+
+    def generate_from_iterable(self, lines, output_file):
+        for line in lines:
+            words = self.line_splitor.split(line.strip('\n'))
+            if not words:
+                continue
+            self.counter.update(words)
+        self._write_to_file(output_file)
+    
+    def _write_to_file(self, output_file):
+         with open(output_file, mode='wt', encoding='utf8', buffering=8192) as fout:
             vocabs = []
             for k, v in self.counter.most_common(self.vocab_size):
                 if v < self.min_count:
                     continue
-                if v == ['unk']:
+                if v == '<unk>':
                     continue
                 if self.filters and any(vf.filter(k) for vf in self.filters):
                     continue
@@ -112,3 +149,5 @@ class VocabGenerator:
             fout.write('<unk>' + '\n')
             for v in vocabs:
                 fout.write(v + '\n')
+
+
