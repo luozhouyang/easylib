@@ -1,7 +1,5 @@
-import os
 import logging
-
-logger = logging.getLogger('easylib')
+import os
 
 
 class FileMerger:
@@ -28,10 +26,10 @@ class FileMerger:
                   buffering=self.write_buffering) as fout:
             for f in input_files:
                 if not os.path.exists(f):
-                    logger.info('File does not exist: %s' % f)
+                    logging.info('File does not exist: %s' % f)
                     continue
                 with open(f, mode=self.read_mode, encoding=self.read_encoding, buffering=self.read_buffering) as fin:
                     for line in fin:
                         fout.write(line)
-                logger.info('Finished write %s to %s' % (f, output_file))
-        logger.info('Done!')
+                logging.info('Finished write %s to %s' % (f, output_file))
+        logging.info('Done!')

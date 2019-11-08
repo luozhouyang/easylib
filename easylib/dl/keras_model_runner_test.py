@@ -32,7 +32,7 @@ class DatasetRunnerTest(unittest.TestCase):
 
     def testKerasModelDatasetRunner(self):
         model = self.createModel()
-        r = KerasModelDatasetRunner(model, model_dir='/tmp/mnist', model_name='mnist', logger_name='easylib')
+        r = KerasModelDatasetRunner(model, model_dir='/tmp/mnist', model_name='mnist')
 
         image = tf.data.Dataset.from_tensor_slices(train_images)
         label = tf.data.Dataset.from_tensor_slices(train_labels)

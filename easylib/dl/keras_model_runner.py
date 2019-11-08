@@ -7,19 +7,17 @@ import tensorflow as tf
 class DatasetRunner:
     """Tensorflow 2.x models runner, using tf.data API."""
 
-    def __init__(self, model: tf.keras.Model, model_dir, model_name='model', logger_name=None):
+    def __init__(self, model: tf.keras.Model, model_dir, model_name='model'):
         """Init.
 
         Args:
             model: Model, instance of `tf.keras.Model`
             model_dir: The directory to save model files
             model_name: The name of the model, used as checkpoint file names.
-            logger_name: The name of the logger.
         """
         self.model = model
         self.model_dir = model_dir
         self.model_name = model_name
-        self.logger = logging.getLogger(logger_name)
 
     def train(self, dataset, val_dataset=None, ckpt=None):
         """Train the model.
@@ -70,7 +68,7 @@ class DatasetRunner:
                 return
             ckpt = tf.train.latest_checkpoint(ckpt)
         self.model.load_weights(ckpt)
-        self.logger.info('Load weights from ckpt: %s' % ckpt)
+        logging.info('Load weights from ckpt: %s' % ckpt)
 
 
 class KerasModelDatasetRunner(DatasetRunner):
@@ -83,8 +81,7 @@ class KerasModelDatasetRunner(DatasetRunner):
                  train_callbacks=None,
                  eval_callbacks=None,
                  predict_callbacks=None,
-                 configs=None,
-                 logger_name=None):
+                 configs=None):
         """Init.
 
         Args:
@@ -95,9 +92,8 @@ class KerasModelDatasetRunner(DatasetRunner):
             eval_callbacks: A list of extra callbacks for evaluation
             predict_callbacks: A list of extra callbacks for prediction
             configs: A dict of configuration, see `default_configs()`
-            logger_name: The name of the logger.
         """
-        super(KerasModelDatasetRunner, self).__init__(model, model_dir, model_name, logger_name)
+        super(KerasModelDatasetRunner, self).__init__(model, model_dir, model_name)
         default_configs = self.default_config()
         if configs:
             default_configs.update(configs)
