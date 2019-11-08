@@ -19,7 +19,8 @@ class FileSpliter:
         else:
             self._split_file(file, num_parts + 1, lines_each_part, output_dir)
 
-    def _split_file(self, file, parts, lines_each_part, output_dir):
+    @staticmethod
+    def _split_file(file, parts, lines_each_part, output_dir):
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         path, name = os.path.split(file)
@@ -33,7 +34,8 @@ class FileSpliter:
                             break
                         fout.write(line)
 
-    def _count_file_lines(self, f):
+    @staticmethod
+    def _count_file_lines(f):
         with open(f) as f:
             for i, l in enumerate(f):
                 pass
